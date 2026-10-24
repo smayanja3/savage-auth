@@ -13,7 +13,7 @@
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
-
+ 
     <div class="row">
 
         <!-- LOCAL INFORMATION -->
@@ -40,13 +40,14 @@
           <ul class="messages">
           <% for(var i=0; i<messages.length; i++) {%>
             <li class="message">
-              <span><%= messages[i].name %></span>
+              <span data-user-id="<%= messages[i]._id %>"><%= messages[i].name %></span>
               <span><%= messages[i].msg %></span>
               <span><%= messages[i].thumbUp %></span>
+
               <span><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
               <span><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>
-              <span><i class="fa fa-trash" aria-hidden="true"></i></span>
-            </li>
+              <span><i class="fa fa-trash" aria-hidden="true">🗑️</i></span>
+            </li> 
           <% } %>
           </ul>
 
@@ -66,3 +67,8 @@
 
 </body>
 </html>
+
+
+swabi likes cat.  id(#23456)
+
+swabi likes cat.  id(#12098)

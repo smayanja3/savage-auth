@@ -1,21 +1,22 @@
-module.exports = function(app, passport, db) {
+module.exports = function(app, passport, db, ObjectID) {
 
 // normal routes ===============================================================
 
     // show the home page (will also have our login links)
     app.get('/', function(req, res) {
-        res.render('index.ejs');
+        res.render('index.ejs'); 
     });
 
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function(req, res) {
         db.collection('messages').find().toArray((err, result) => {
+          console.log(result)
           if (err) return console.log(err)
           res.render('profile.ejs', {
             user : req.user,
             messages: result
           })
-        })
+        }) 
     });
 
     // LOGOUT ==============================
@@ -36,23 +37,49 @@ module.exports = function(app, passport, db) {
       })
     })
 
-    app.put('/messages', (req, res) => {
+ //------------- THUMB UP -----------///
+    app.put('/thumbUp', (req, res) => {
       db.collection('messages')
-      .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
-        $set: {
-          thumbUp:req.body.thumbUp + 1
+      .findOneAndUpdate({
+        _id: new ObjectID(req.body.uniqueId)
+      }, {
+        $inc: {//<--  mongoDB oporatir that acs on a 'field'
+          thumbUp: + 1
         }
       }, {
         sort: {_id: -1},
-        upsert: true
+        upsert: true //<- create and insert the new/updated infor
       }, (err, result) => {
         if (err) return res.send(err)
         res.send(result)
       })
     })
 
-    app.delete('/messages', (req, res) => {
-      db.collection('messages').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
+ //------------- THUMB DOWN -----------//
+    app.put('/thumbDown', (req, res) => {
+      db.collection('messages')
+      .findOneAndUpdate({
+        _id: new ObjectID(req.body.uniqueId)
+      }, {
+        $inc: {//<-- updates the record in your db inside the object we could do anything, change the name/ message/ or any other key in the value pair.
+          thumbUp: - 1
+        }
+      }, {
+        sort: {_id: -1},
+        upsert: true //<- create and insert the new/updated infor
+      }, (err, result) => {
+        if (err) return res.send(err)
+        res.send(result)
+      })
+    })
+
+  //-------------TRASH -----------//
+    app.delete('/trash', (req, res) => {
+      db.collection('messages').findOneAndDelete({
+        // name: req.body.name, 
+        // msg: req.body.msg,
+        _id: new ObjectID(req.body.uniqueId)
+      }, (err, result) => {
         if (err) return res.send(500, err)
         res.send('Message deleted!')
       })
