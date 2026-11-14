@@ -1,3 +1,9 @@
+## 📸 Project Preview
+
+![Boom Image](public/img/auth.png)
+
+**Live Demo:** [[Live Site](https://savage-auth-7s3h.onrender.com/)]
+
 ## Installation
 
 1. Clone repo
